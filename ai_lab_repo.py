@@ -3,6 +3,8 @@ from copy import copy
 from common_imports import *
 from mlesolver import MLESolver
 from torch.backends.mkl import verbose
+from dotenv import load_dotenv
+import configargparse
 
 import argparse
 import pickle
@@ -527,7 +529,8 @@ class LaboratoryWorkflow:
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="AgentLaboratory Research Workflow")
+    #parser = argparse.ArgumentParser(description="AgentLaboratory Research Workflow")
+    parser = configargparse.ArgParser(default_config_files=["args.txt"])
 
     parser.add_argument(
         '--copilot-mode',
@@ -555,11 +558,6 @@ def parse_arguments():
         help='Specify the research topic.'
     )
 
-    parser.add_argument(
-        '--api-key',
-        type=str,
-        help='Provide the OpenAI API key.'
-    )
 
     parser.add_argument(
         '--compile-latex',
@@ -608,6 +606,7 @@ def parse_arguments():
 
 
 if __name__ == "__main__":
+    load_dotenv()
     args = parse_arguments()
 
     llm_backend = args.llm_backend
@@ -628,9 +627,10 @@ if __name__ == "__main__":
         raise Exception("args.papersolver_max_steps must be a valid integer!")
 
 
-    api_key = os.getenv('OPENAI_API_KEY') or args.api_key or "your-default-api-key"
-    if not api_key:
-        raise ValueError("API key must be provided via --api-key or the OPENAI_API_KEY environment variable.")
+    api_key = os.getenv('AZURE_OPENAI_API_KEY') or args.api_key or "your-default-api-key"
+    azure_openai_endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
+    if not api_key or not azure_openai_endpoint:
+        raise ValueError("API key and endpoint must be provided via --api-key and --azure-openai-endpoint or the AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT environment variables.")
 
     ##########################################################
     # Research question that the agents are going to explore #
