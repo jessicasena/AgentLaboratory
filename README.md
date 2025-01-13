@@ -30,10 +30,19 @@
   <img src="media/AgentLabWF.png" alt="Demonstration of the flow of AgentClinic" style="width: 99%;">
 </p>
 
+
+### 👾 Currently supported models
+
+* **OpenAI**: o1, o1-preview, o1-mini, gpt-4o
+* **DeepSeek**: deepseek-chat (deepseek-v3)
+
+To select a specific llm set the flag `--llm-backend="llm_model"` for example `--llm-backend="gpt-4o"` or `--llm-backend="deepseek-chat"`. Please feel free to add a PR supporting new models according to your need!
+
 ## 🖥️ Installation
 
 ### Python venv option
 
+* We recommend using python 3.12
 
 1. **Clone the GitHub Repository**: Begin by cloning the repository using the command:
 ```bash
@@ -131,7 +140,7 @@ When resources are limited, **optimize by fine-tuning smaller models** on your s
 
 **If you lose progress, internet connection, or if a subtask fails, you can always load from a previous state.** All of your progress is saved by default in the `state_saves` variable, which stores each individual checkpoint. Just pass the following arguments when running `ai_lab_repo.py`
 
-`python ai_lab_repo.py --api-key "API_KEY_HERE" --research-topic "YOUR RESEARCH IDEA" --llm-backend "o1-mini" --load-existing True --load-existing-path "save_states/LOAD_PATH"`
+`python ai_lab_repo.py --api-key "API_KEY_HERE" --research-topic "YOUR RESEARCH IDEA" --llm-backend "o1-mini" --load-existing True --load-existing-path "state_saves/LOAD_PATH"`
 
 -----
 
