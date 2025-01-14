@@ -14,3 +14,7 @@ state_saves/*
 __pycache__/*
 Figure*.png
 testrun.py
+slurm_outputs/*
+args.txt
+.env
+run.sh
