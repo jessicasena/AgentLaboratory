@@ -650,7 +650,7 @@ if __name__ == "__main__":
 
     task_notes_LLM = [
         {"phases": ["plan formulation"],
-         "note": f"You should come up with a plan for TWO experiments."},
+         "note": f"You should come up with a plan for ONE experiments."},
 
         {"phases": ["plan formulation", "data preparation", "running experiments"],
          "note": "Please use gpt-4o-mini for your experiments."},
@@ -665,7 +665,7 @@ if __name__ == "__main__":
          "note": "I would recommend using a small dataset (approximately only 100 data points) to run experiments in order to save time. Do not use much more than this unless you have to or are running the final tests."},
 
         {"phases": ["data preparation", "running experiments"],
-         "note": "You are running on a MacBook laptop. You can use 'mps' with PyTorch"},
+         "note": "You are running on a linux server. Use python."},
 
         {"phases": ["data preparation", "running experiments"],
          "note": "Generate figures with very colorful and artistic design."},

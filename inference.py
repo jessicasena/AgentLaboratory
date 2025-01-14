@@ -49,7 +49,7 @@ def query_model(model_str, prompt, system_prompt, tries=5, timeout=5.0, temp=Non
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ]
-            deployment_name='ehrsummary'
+            deployment_name='gpt-4o-mini'
 
             completion = client.chat.completions.create(
                 model=deployment_name,
