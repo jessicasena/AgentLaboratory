@@ -18,3 +18,5 @@ slurm_outputs/*
 args.txt
 .env
 run.sh
+run_ollama.sh
+*.txt
