@@ -3,9 +3,11 @@ from copy import copy
 from common_imports import *
 from mlesolver import MLESolver
 from torch.backends.mkl import verbose
+from dotenv import load_dotenv
 
 import argparse
 import pickle
+import configargparse
 
 DEFAULT_LLM_BACKBONE = "o1-mini"
 
@@ -529,7 +531,8 @@ class LaboratoryWorkflow:
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="AgentLaboratory Research Workflow")
+    #parser = argparse.ArgumentParser(description="AgentLaboratory Research Workflow")
+    parser = configargparse.ArgParser(default_config_files=["args.txt"])
 
     parser.add_argument(
         '--copilot-mode',
@@ -616,6 +619,7 @@ def parse_arguments():
 
 
 if __name__ == "__main__":
+    load_dotenv()
     args = parse_arguments()
 
     llm_backend = args.llm_backend

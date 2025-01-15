@@ -2,8 +2,8 @@ import time, tiktoken
 from openai import OpenAI
 import openai
 import os, anthropic, json
-from ollama import chat
-from transformers import AutoTokenizer
+import ollama
+
 
 TOKENS_IN = dict()
 TOKENS_OUT = dict()
@@ -166,31 +166,38 @@ def query_model(model_str, prompt, system_prompt, openai_api_key=None, anthropic
                     completion = client.chat.completions.create(
                         model="o1-preview", messages=messages)
                 answer = completion.choices[0].message.content
-            elif model_str == "ollama":
+            elif "lama" in model_str:
                 messages=[
                     {
                         'role': 'user',
                         'content': system_prompt + prompt,
                     }]
-                response = chat(model_str, messages=messages)
+                response = ollama.chat(model=model_str, messages=messages)
                 answer = response['message']['content']
+                print(f"llama answer: {answer}") # for debug purposes
 
             if model_str in ["o1-preview", "o1-mini", "claude-3.5-sonnet", "o1"]:
                 encoding = tiktoken.encoding_for_model("gpt-4o")
             elif model_str in ["deepseek-chat"]:
                 encoding = tiktoken.encoding_for_model("cl100k_base")
             elif "lama" in model_str:
-                # Load tokenizer for a Llama model
-                encoding = AutoTokenizer.from_pretrained(f"meta-llama/{model_str}")
+                pass
             else:
                 encoding = tiktoken.encoding_for_model(model_str)
             if model_str not in TOKENS_IN:
                 TOKENS_IN[model_str] = 0
                 TOKENS_OUT[model_str] = 0
-            TOKENS_IN[model_str] += len(encoding.encode(system_prompt + prompt))
-            TOKENS_OUT[model_str] += len(encoding.encode(answer))
-            if print_cost:
-                print(f"Current experiment cost = ${curr_cost_est()}, ** Approximate values, may not reflect true cost")
+            if "lama" in model_str:
+                response = ollama.embed(model=model_str, input=system_prompt + prompt)
+                TOKENS_IN[model_str] += len(response['embeddings'])
+                response = ollama.embed(model=model_str, input=answer)
+                TOKENS_OUT[model_str] += len(response['embeddings'])
+            else:
+                TOKENS_IN[model_str] += len(encoding.encode(system_prompt + prompt))
+                TOKENS_OUT[model_str] += len(encoding.encode(answer))
+
+                if print_cost:
+                    print(f"Current experiment cost = ${curr_cost_est()}, ** Approximate values, may not reflect true cost")
             return answer
         except Exception as e:
             print("Inference Exception:", e)
